@@ -1,20 +1,15 @@
 import argparse
 import os
 import shutil
+import time
 from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
 from langchain_chroma import Chroma  # Updated import
-from langchain_community.embeddings.ollama import OllamaEmbeddings 
+from get_embedding_function import get_embedding_function
 
 CHROMA_PATH = "chroma"
 DATA_PATH = "data"
-
-
-def get_embedding_function():
-    # Use LLaMA 3 for embeddings
-    return OllamaEmbeddings(model="llama3")
-
 
 def main():
     # Check if the database should be cleared (using the --reset flag).
@@ -49,6 +44,9 @@ def split_documents(documents: list[Document]):
 
 
 def add_to_chroma(chunks: list[Document]):
+    # Start the timer
+    start_time = time.time()
+
     # Load or create Chroma database, add documents
     db = Chroma(
         persist_directory=CHROMA_PATH,
@@ -70,9 +68,13 @@ def add_to_chroma(chunks: list[Document]):
         print(f"👉 Adding new documents: {len(new_chunks)}")
         new_chunk_ids = [chunk.metadata["id"] for chunk in new_chunks]
         db.add_documents(new_chunks, ids=new_chunk_ids)
-        # No need to call persist() anymore, it's done automatically
+
     else:
         print("✅ No new documents to add")
+
+    # End the timer
+    end_time = time.time()
+    print(f"Time taken to process embeddings: {end_time - start_time:.2f} seconds")
 
 
 def calculate_chunk_ids(chunks):

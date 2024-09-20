@@ -8,25 +8,19 @@ Actual Response: {actual_response}
 (Answer with 'true' or 'false') Does the actual response match the expected response? 
 """
 
-
-def test_house_sell_price():
+def test_carbonara_tofu_weight():
     assert query_and_validate(
-        question="How much did the west lakes house sell for",
-        expected_response="$600,000",
+        question="How much tofu is used in the Restaurant-Style Carbonara?",
+        expected_response="14 oz (400 g)",
     )
 
 
-def test_email_lookup():
+def test_red_pesto_gnocchi_prep_time():
     assert query_and_validate(
-        question="What is the email address for Jack Hall",
-        expected_response="jackhallsuper7@gmail.com",
+        question="What is the total preparation time for Creamy Red Pesto Gnocchi?",
+        expected_response="25 minutes",
     )
 
-def test_neg_mobile_number():
-    assert not query_and_validate(
-        question="What is the phone number for Jack Hall",
-        expected_response="0412345678",
-    )
 
 
 def query_and_validate(question: str, expected_response: str):
