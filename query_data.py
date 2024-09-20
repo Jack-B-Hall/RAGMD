@@ -1,4 +1,5 @@
 import argparse
+import time  # Importing time module to add the timer
 from langchain_chroma import Chroma  # Updated import for Chroma
 from langchain.prompts import ChatPromptTemplate
 from langchain_community.llms.ollama import Ollama
@@ -24,7 +25,17 @@ def main():
     parser.add_argument("query_text", type=str, help="The query text.")
     args = parser.parse_args()
     query_text = args.query_text
+
+    # Start the timer
+    start_time = time.time()
+    
     query_rag(query_text)
+    
+    # Stop the timer and calculate duration
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+
+    print(f"Query executed in {elapsed_time:.2f} seconds")
 
 
 def query_rag(query_text: str):
